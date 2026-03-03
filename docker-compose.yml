@@ -1,0 +1,107 @@
+version: "3.9"
+
+services:
+  # ---------- Edge (optional later) ----------
+  # nginx:
+  #   image: nginx:alpine
+  #   ports: ["80:80"]
+  #   depends_on: [gateway]
+
+  # ---------- Gateway ----------
+  gateway:
+    build: ./gateway
+    ports:
+      - "3000:3000"
+    environment:
+      USER_SERVICE_URL: http://user_service:4001
+      MEAL_SERVICE_URL: http://meal_service:4002
+      TRACKING_SERVICE_URL: http://tracking_service:4003
+    depends_on:
+      - user_service
+      - meal_service
+      - tracking_service
+
+  # ---------- User Service + DB ----------
+  user_service:
+    build: ./services/user_service
+    ports: ["4001:4001"]
+    environment:
+      DATABASE_URL: postgres://user_user:user_pass@user-db:5432/user_db
+      KAFKA_BROKERS: redpanda:9092
+      SERVICE_NAME: user_service
+    depends_on: [user-db, redpanda]
+
+  user-db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user_user
+      POSTGRES_PASSWORD: user_pass
+      POSTGRES_DB: user_db
+    volumes: [user_data:/var/lib/postgresql/data]
+    ports: ["5433:5432"]  # optional host access
+
+  # ---------- Meal Service + DB ----------
+  meal_service:
+    build: ./services/meal_service
+    ports: ["4002:4002"]
+    environment:
+      DATABASE_URL: postgres://meal_user:meal_pass@meal-db:5432/meal_db
+      KAFKA_BROKERS: redpanda:9092
+      SERVICE_NAME: meal_service
+    depends_on: [meal-db, redpanda]
+
+  meal-db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: meal_user
+      POSTGRES_PASSWORD: meal_pass
+      POSTGRES_DB: meal_db
+    volumes: [meal_data:/var/lib/postgresql/data]
+    ports: ["5434:5432"]
+
+  # ---------- Tracking Service + DB ----------
+  tracking_service:
+    build: ./services/tracking_service
+    ports: ["4003:4003"]
+    environment:
+      DATABASE_URL: postgres://tracking_user:tracking_pass@tracking-db:5432/tracking_db
+      KAFKA_BROKERS: redpanda:9092
+      SERVICE_NAME: tracking_service
+    depends_on: [tracking-db, redpanda]
+
+  tracking-db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: tracking_user
+      POSTGRES_PASSWORD: tracking_pass
+      POSTGRES_DB: tracking_db
+    volumes: [tracking_data:/var/lib/postgresql/data]
+    ports: ["5435:5432"]
+
+  # ---------- Kafka-compatible broker ----------
+  redpanda:
+    image: redpandadata/redpanda:latest
+    command:
+      - redpanda
+      - start
+      - --overprovisioned
+      - --smp
+      - "1"
+      - --memory
+      - "1G"
+      - --reserve-memory
+      - "0M"
+      - --node-id
+      - "0"
+      - --check=false
+      - --kafka-addr
+      - PLAINTEXT://0.0.0.0:9092
+      - --advertise-kafka-addr
+      - PLAINTEXT://redpanda:9092
+    ports:
+      - "9092:9092"
+
+volumes:
+  user_data:
+  meal_data:
+  tracking_data:
