@@ -1,12 +1,4 @@
 const express = require("express");
-
 const app = express();
-app.use(express.json());
-
-app.get("/", (req, res) => {
-  res.json({ service: "user_service running" });
-});
-
-app.listen(4001, () => {
-  console.log("User service running on port 4001");
-});
+app.get("/", (_, res) => res.json({ service: "meal_service" }));
+app.listen(4002, () => console.log("meal_service on 4002"));
