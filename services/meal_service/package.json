@@ -11,6 +11,7 @@
   "description": "",
   "dependencies": {
     "express": "^5.2.1",
-    "kafkajs": "^2.2.4"
+    "kafkajs": "^2.2.4",
+    "@types/node": "~10.12.0"
   }
 }
