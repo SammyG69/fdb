@@ -65,4 +65,19 @@ async function start() {
   }
 }
 
+async function mealUpdated(meal_id, user_id, calories, protein, fat, fibre, carbs)
+{
+  try 
+  {
+    const event = {
+      eventId: "event-2",
+      mealId: meal_id,
+      userId, user_id,
+      calories: calories,
+      
+
+    }
+  }
+}
+
 start();
