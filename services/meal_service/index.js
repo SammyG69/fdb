@@ -17,11 +17,11 @@ app.get("/health", (req, res)=> {
 app.post("/test-publish", async (req, res) => {
   try {
     const event = {
-       eventId: "evt-1",
+       eventId: "evt-22",
       mealId: "meal-123",
       userId: "user-123",
-      calories: 650,
-      protein: 40,
+      calories: 350,
+      protein: 50,
       carbs: 55,
       fat: 20,
       loggedAt: new Date().toISOString(),
@@ -65,19 +65,5 @@ async function start() {
   }
 }
 
-async function mealUpdated(meal_id, user_id, calories, protein, fat, fibre, carbs)
-{
-  try 
-  {
-    const event = {
-      eventId: "event-2",
-      mealId: meal_id,
-      userId, user_id,
-      calories: calories,
-      
-
-    }
-  }
-}
 
 start();

@@ -27,14 +27,8 @@ async function startConsumer() {
       if (!message.value) return;
 
       const event = JSON.parse(message.value.toString());
-
+      await handleMealLogged(event);
       console.log("tracking_service received event:");
-      console.log({
-        topic,
-        partition,
-        key: message.key ? message.key.toString() : null,
-        event,
-      });
     },
   });
 }
