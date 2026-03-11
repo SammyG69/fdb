@@ -1,6 +1,6 @@
 console.log("RUNNING FILE:", __filename);
 console.log("CWD:", process.cwd());
-console.log("STARTED NEW VERSION: EVT_22_BUILD");
+console.log("STARTED NEW VERSION: EVT_28_BUILD");
 
 require("dotenv").config();
 
@@ -21,39 +21,41 @@ app.get("/health", (req, res)=> {
 app.post("/test-publish", async (req, res) => {
   try {
     const event = {
-       eventId: "evt-22",
+      eventId: "evt-24",
       mealId: "meal-123",
       userId: "user-123",
-      calories: 350,
+      calories: 850,
       protein: 50,
       carbs: 55,
       fat: 20,
       loggedAt: new Date().toISOString(),
     };
 
-    console.log("Publishing event:", event); 
+    console.log("ABOUT TO PUBLISH THIS EVENT:");
+    console.log(event);
 
     await producer.send({
       topic: "meal.events",
-      messages:[
+      messages: [
         {
           key: event.userId,
-          value: JSON.stringify(
-            {
-              eventType: "MealLogged",
-              eventVersion: 1,
-              ...event
-            }
-          ),
-        }
+          value: JSON.stringify({
+            eventType: "MealLogged",
+            eventVersion: 1,
+            ...event,
+          }),
+        },
       ],
     });
 
-    res.json({ success: true, message: "Event published"});
-  } catch(error)
-  {
-    console.error("Publish Failed: ", error);
-    res.status(500).json({ success: false, error: "Publish failed"});
+    res.json({
+      success: true,
+      marker: "EVT_22_SENT",
+      event,
+    });
+  } catch (error) {
+    console.error("Publish failed:", error);
+    res.status(500).json({ success: false, error: "Publish failed" });
   }
 });
 

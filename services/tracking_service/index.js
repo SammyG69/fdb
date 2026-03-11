@@ -1,7 +1,9 @@
+
 require("dotenv").config();
 
 const express = require("express");
 const { consumer } = require("./src/kafka");
+const { handleMealLogged } = require("./src/handlers/mealLogged")
 
 const app = express();
 app.use(express.json());
