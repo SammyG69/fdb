@@ -191,10 +191,11 @@ cython_debug/
 
 # Ruff stuff:
 .ruff_cache/
-
+docker-compose.yml
 # PyPI configuration file
 .pypirc
 
+*.yml
 # Cursor
 #  Cursor is an AI-powered code editor. `.cursorignore` specifies files/directories to
 #  exclude from AI features like autocomplete and code analysis. Recommended for sensitive data
