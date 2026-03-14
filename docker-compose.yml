@@ -7,6 +7,30 @@ services:
   #   depends_on: [gateway]
 
   # ---------- Gateway ----------
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prom-data:/prometheus
+    networks:
+      - monitoring
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    networks:
+      - monitoring
   gateway:
     build: ./gateway
     ports:
@@ -104,3 +128,9 @@ volumes:
   user_data:
   meal_data:
   tracking_data:
+  prom-data: {}
+  grafana-storage: {}
+
+networks:
+  monitoring:
+    external: true
