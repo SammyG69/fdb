@@ -1,9 +1,18 @@
 import { z } from "zod";
+import { baseEventSchema } from "./baseEvent.schema.js";
 
-export const baseEventSchema = z.object({
-  eventId: z.string().uuid(),
-  eventType: z.string(),
-  version: z.number().int().positive(),
-  occurredAt: z.string().datetime(),
-  source: z.string().min(1)
+const payloadSchema = z.object({
+  mealId: z.string().min(1),
+  userId: z.string().min(1),
+  name: z.string().min(1),
+  calories: z.number().nonnegative(),
+  protein: z.number().nonnegative(),
+  carbs: z.number().nonnegative(),
+  fat: z.number().nonnegative(),
+  loggedAt: z.string().datetime()
+});
+
+export const mealUpdatedEventSchema = baseEventSchema.extend({
+  eventType: z.literal("MealUpdated"),
+  payload: payloadSchema
 });
