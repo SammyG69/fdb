@@ -3,9 +3,10 @@ import express from "express";
 import { randomUUID } from "crypto";
 
 import { producer } from "./src/kafka.js";
-import { mealLoggedEventSchema } from "../shared/schemas/mealLogged.schema.js";
-import { mealUpdatedEventSchema } from "../shared/schemas/mealUpdated.schema.js";
-import { mealDeletedEventSchema } from "../shared/schemas/mealDeleted.schema.js";
+import { mealLoggedEventSchema } from "../../shared/schemas/mealLogged.Schema.js";
+import { mealUpdatedEventSchema } from "../../shared/schemas/mealUpdated.Schema.js";
+import { mealDeletedEventSchema } from "../../shared/schemas/mealDeleted.Schema.js";
+import {router} from "./metrics/index.ts";
 
 console.log("STARTED NEW VERSION: EVT_29_BUILD");
 console.log("CWD:", process.cwd());
@@ -19,6 +20,12 @@ app.get("/", (req, res) => {
 
 app.get("/health", (req, res) => {
   res.json({ ok: true, service: "meal_service" });
+});
+
+app.use(router);
+
+app.listen(4001, "0.0.0.0", () => {
+  console.log("meal_service running on port 4001");
 });
 
 /**

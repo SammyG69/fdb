@@ -1,14 +1,18 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { Router } from "express";
 import { register, collectDefaultMetrics } from "prom-client";
 
-// Register default metrics only once.
-if (!globalThis.metricsRegistered) {
-  const prefix = 'my_application_';
-  collectDefaultMetrics({prefix });
-  globalThis.metricsRegistered = true;
+const router = Router();
+
+let metricsInitialized = false;
+
+if (!metricsInitialized) {
+  collectDefaultMetrics({ prefix: "meal_service_" });
+  metricsInitialized = true;
 }
 
-export default async function handler(_: NextApiRequest, res: NextApiResponse) {
-  res.setHeader('Content-Type', register.contentType);
-  res.send(await register.metrics());
-}
+router.get("/metrics", async (_req, res) => {
+  res.set("Content-Type", register.contentType);
+  res.end(await register.metrics());
+});
+
+export default router;
