@@ -3,12 +3,7 @@ import { register, collectDefaultMetrics } from "prom-client";
 
 const router = Router();
 
-let metricsInitialized = false;
-
-if (!metricsInitialized) {
-  collectDefaultMetrics({ prefix: "meal_service_" });
-  metricsInitialized = true;
-}
+collectDefaultMetrics({ prefix: "meal_service_" });
 
 router.get("/metrics", async (_req, res) => {
   res.set("Content-Type", register.contentType);

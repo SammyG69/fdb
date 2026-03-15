@@ -6,7 +6,7 @@ import { producer } from "./src/kafka.js";
 import { mealLoggedEventSchema } from "../../shared/schemas/mealLogged.Schema.js";
 import { mealUpdatedEventSchema } from "../../shared/schemas/mealUpdated.Schema.js";
 import { mealDeletedEventSchema } from "../../shared/schemas/mealDeleted.Schema.js";
-import {router} from "./metrics/index.ts";
+import router from "./metrics/index.js";
 
 console.log("STARTED NEW VERSION: EVT_29_BUILD");
 console.log("CWD:", process.cwd());
@@ -24,10 +24,6 @@ app.get("/health", (req, res) => {
 
 app.use(router);
 
-app.listen(4001, "0.0.0.0", () => {
-  console.log("meal_service running on port 4001");
-});
-
 /**
  * Helper to publish validated events
  */
@@ -43,10 +39,6 @@ async function publishEvent(topic, event) {
   });
 }
 
-/**
- * POST /test-publish/logged
- * Publishes a MealLogged event
- */
 app.post("/test-publish/logged", async (req, res) => {
   try {
     const now = new Date().toISOString();
@@ -90,10 +82,6 @@ app.post("/test-publish/logged", async (req, res) => {
   }
 });
 
-/**
- * POST /test-publish/updated
- * Publishes a MealUpdated event
- */
 app.post("/test-publish/updated", async (req, res) => {
   try {
     const now = new Date().toISOString();
@@ -136,10 +124,6 @@ app.post("/test-publish/updated", async (req, res) => {
   }
 });
 
-/**
- * POST /test-publish/deleted
- * Publishes a MealDeleted event
- */
 app.post("/test-publish/deleted", async (req, res) => {
   try {
     const now = new Date().toISOString();
@@ -182,8 +166,8 @@ async function start() {
     await producer.connect();
     console.log("Kafka Producer connected for meal_service");
 
-    app.listen(4002, () => {
-      console.log("meal_service on 4002");
+    app.listen(4002, "0.0.0.0", () => {
+      console.log("meal_service running on port 4002");
     });
   } catch (error) {
     console.error("Failed to start meal_service:", error);
