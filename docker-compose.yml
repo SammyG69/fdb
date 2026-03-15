@@ -65,7 +65,9 @@ services:
 
   # ---------- Meal Service + DB ----------
   meal_service:
-    build: ./services/meal_service
+    build:
+      context: .
+      dockerfile: ./services/meal_service/Dockerfile
     ports: ["4002:4002"]
     environment:
       DATABASE_URL: postgres://meal_user:meal_pass@meal-db:5432/meal_db
