@@ -7,6 +7,9 @@ RUN npm install
 
 COPY . .
 
+COPY services/tracking_service/ .
+COPY shared ./shared
+
 EXPOSE 4003
 
 CMD ["node", "index.js"]

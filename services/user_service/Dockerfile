@@ -7,6 +7,9 @@ RUN npm install
 
 COPY . .
 
+COPY services/user_service/ .
+COPY shared ./shared
+
 EXPOSE 4001
 
 CMD ["node", "index.js"]
