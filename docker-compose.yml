@@ -46,7 +46,7 @@ services:
 
   # ---------- User Service + DB ----------
   user_service:
-    build: ./services/user_service
+    build: ./services/user_service/Dockerfile
     ports: ["4001:4001"]
     environment:
       DATABASE_URL: postgres://user_user:user_pass@user-db:5432/user_db
@@ -92,7 +92,9 @@ services:
 
   # ---------- Tracking Service + DB ----------
   tracking_service:
-    build: ./services/tracking_service
+    build: 
+      context: .
+      dockerfile: ./services/tracking_service/Dockerfile
     ports: ["4003:4003"]
     environment:
       DATABASE_URL: postgres://tracking_user:tracking_pass@tracking-db:5432/tracking_db

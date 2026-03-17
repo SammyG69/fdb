@@ -1,13 +1,12 @@
-import router from "./metrics/index";
-import handleMealLogged from "./handlers/mealLogged.js";
-import handleMealUpdated from "./handlers/mealUpdated.js";
-import handleMealDeleted from "./handlers/mealDeleted.js";
+import router from "./metrics/index.js";
+import handleMealLogged from "./src/handlers/mealLogged.js";
+import handleMealUpdated from "./src/handlers/mealUpdated.js";
+import handleMealDeleted from "./src/handlers/mealDeleted.js";
 
 require("dotenv").config();
 
 const express = require("express");
 const { consumer } = require("./src/kafka");
-const { handleMealLogged } = require("./src/handlers/mealLogged")
 
 const app = express();
 app.use(express.json());
