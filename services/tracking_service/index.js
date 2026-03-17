@@ -1,4 +1,7 @@
 import router from "./metrics/index";
+import handleMealLogged from "./handlers/mealLogged.js";
+import handleMealUpdated from "./handlers/mealUpdated.js";
+import handleMealDeleted from "./handlers/mealDeleted.js";
 
 require("dotenv").config();
 
@@ -28,11 +31,7 @@ async function startConsumer() {
     fromBeginning: false,
   });
 
-  console.log("tracking_service subscribed to meal.events");
-
-  import { handleMealLogged } from "./handlers/mealLogged.js";
-import { handleMealUpdated } from "./handlers/mealUpdated.js";
-import { handleMealDeleted } from "./handlers/mealDeleted.js";
+console.log("tracking_service subscribed to meal.events");
 
 await consumer.run({
   eachMessage: async ({ message }) => {
