@@ -5,7 +5,7 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL
 });
 
-export async function handleMealDeleted(event) {
+export default async function handleMealDeleted(event) {
 
   const { meal_id, user_id } = event;
 

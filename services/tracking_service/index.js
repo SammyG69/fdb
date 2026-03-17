@@ -3,10 +3,11 @@ import handleMealLogged from "./src/handlers/mealLogged.js";
 import handleMealUpdated from "./src/handlers/mealUpdated.js";
 import handleMealDeleted from "./src/handlers/mealDeleted.js";
 
-require("dotenv").config();
+import "dotenv/config";
 
-const express = require("express");
-const { consumer } = require("./src/kafka");
+import express from "express";
+
+import { consumer } from "./src/kafka.js";
 
 const app = express();
 app.use(express.json());

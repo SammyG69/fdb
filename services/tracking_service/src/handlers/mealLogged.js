@@ -1,7 +1,8 @@
 
-import { pool } from "../db.js"
+import pkg from 'pg';
+const { Pool } = pkg;
 
-export async function handleMealLogged(event) {
+export default async function handleMealLogged(event) {
   console.log("Handling MealLogged event");
 
   const query = `
