@@ -1,4 +1,4 @@
-import {metricsRouter} from "./metrics/index";
+import router from "./metrics/index";
 
 require("dotenv").config();
 
@@ -13,7 +13,7 @@ app.get("/", (_, res) => res.json({ service: "tracking_service" }));
 
 app.get("/health", (_, res) => res.json({ ok: true, service: "tracking_service" }));
 
-app.use(metricsRouter);
+app.use(router);
 
 app.listen(4002, "0.0.0.0", () => {
   console.log("tracking_service running on port 4002");
