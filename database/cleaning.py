@@ -8,7 +8,7 @@ OUT_DIR = Path("fdb/database")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 FILE_NAMES = [
-    "nutrition.xlsx"
+    "AFCD Release 3 - Nutrient profiles.xlsx"
 ]
 
 KJ_TO_KCAL = 1 / 4.184
