@@ -69,6 +69,8 @@ out = pd.DataFrame({
 
 if fibre_col:
     out["fibre_g"] = df[fibre_col].map(to_num).map(lambda v: v * scale if v is not None else None)
+else:
+    out["fibre_g"] = 0.0
 
 # clean
 out["food_name"] = out["food_name"].str.replace(r"\s+", " ", regex=True)
