@@ -89,7 +89,9 @@ services:
       POSTGRES_USER: meal_user
       POSTGRES_PASSWORD: meal_pass
       POSTGRES_DB: meal_db
-    volumes: [meal_data:/var/lib/postgresql/data]
+    volumes:
+      - meal_data:/var/lib/postgresql/data
+      - ./combined_foods.csv:/data/combined_foods.csv
     ports: ["5434:5432"]
 
   # ---------- Tracking Service + DB ----------
