@@ -49,11 +49,3 @@ async function userProfileUpdate(user_id, attributes) {
   });
   console.log(`userGoals update event sent for user ${user_id}`);
 }
-
-async function userGoalsUpdate(user_id) {
-  await producer.send({
-    topic: "user-goals-update",
-    messages: [{ key: String(user_id), value: JSON.stringify({ user_id }) }],
-  });
-  console.log(`userGoals update event manually sent for user ${user_id}`);
-}
