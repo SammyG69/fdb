@@ -1,10 +1,14 @@
 import express from "express";
 import { producer } from './src/kafka.js';
 import router from "./metrics/index.js";
+import handleUserUpdated from "./src/handlers/userAttributesUpdated.js"
 
 const app = express();
+
 app.use(express.json());
+
 app.use(router)
+
 app.get("/", (req, res) => {
   res.json({ service: "user_service running" });
 });
@@ -12,3 +16,17 @@ app.get("/", (req, res) => {
 app.listen(4001, () => {
   console.log("User service running on port 4001");
 });
+
+
+- Make a function that handles updates of user profile
+     - Triggers userGoalsUpdated
+- Also manually allows uerGoals to be updated
+
+async function userProfileUpdate()
+{
+}
+
+async function userGoalsUpdate()
+{
+
+}
