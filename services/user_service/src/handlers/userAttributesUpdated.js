@@ -25,7 +25,8 @@ export default async function handleUserUpdated(event)
         [
             weight,
             height,
-            age
+            age,
+            user_id
         ]
         );
         console.log(`User Attributes has been updated`);
