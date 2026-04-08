@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useAuth } from '@clerk/nextjs';
 
 type Food = {
   name: string;
@@ -45,6 +46,7 @@ function scale(val: number, qty: number) {
 }
 
 export default function LoggingPage() {
+  const { userId } = useAuth();
   const [mealType, setMealType] = useState('Breakfast');
   const [foodSearch, setFoodSearch] = useState('');
   const [quantity, setQuantity] = useState(100);
@@ -52,6 +54,8 @@ export default function LoggingPage() {
   const [items, setItems] = useState<LogItem[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [notes, setNotes] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const foodResults = FOOD_OPTIONS.filter((f) =>
     f.name.toLowerCase().includes(foodSearch.toLowerCase())
@@ -79,9 +83,33 @@ export default function LoggingPage() {
     setItems((prev) => prev.filter((_, i) => i !== index));
   }
 
-  function handleSubmit() {
-    if (items.length === 0) return;
-    setSubmitted(true);
+  async function handleSubmit() {
+    if (items.length === 0 || !userId) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch('/api/meals/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId,
+          name: mealType,
+          calories: totals.calories,
+          protein: totals.protein,
+          carbs: totals.carbs,
+          fat: totals.fats,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Failed to log meal');
+      }
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to log meal');
+    } finally {
+      setLoading(false);
+    }
   }
 
   function handleReset() {
@@ -328,12 +356,15 @@ export default function LoggingPage() {
                 </>
               )}
 
+              {error && (
+                <p className="mb-3 text-xs text-red-500">{error}</p>
+              )}
               <button
                 onClick={handleSubmit}
-                disabled={items.length === 0}
+                disabled={items.length === 0 || loading || !userId}
                 className="w-full rounded-2xl bg-slate-900 px-4 py-2.5 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                Submit Meal Log
+                {loading ? 'Submitting…' : 'Submit Meal Log'}
               </button>
             </div>
           </div>
