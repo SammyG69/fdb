@@ -161,6 +161,39 @@ app.post("/test-publish/deleted", async (req, res) => {
   }
 });
 
+app.post("/meals/log", async (req, res) => {
+  try {
+    const { userId, name, calories, protein, carbs, fat } = req.body;
+    const now = new Date().toISOString();
+
+    const rawEvent = {
+      eventId: randomUUID(),
+      eventType: "MealLogged",
+      version: 1,
+      occurredAt: now,
+      source: "meal_service",
+      payload: {
+        mealId: randomUUID(),
+        userId,
+        name,
+        calories,
+        protein,
+        carbs,
+        fat,
+        loggedAt: now,
+      },
+    };
+
+    const event = mealLoggedEventSchema.parse(rawEvent);
+    await publishEvent("meal.events", event);
+
+    res.json({ success: true, event });
+  } catch (error) {
+    console.error("Meal log failed:", error);
+    res.status(500).json({ success: false, error: error.message || "Meal log failed" });
+  }
+});
+
 async function start() {
   try {
     await producer.connect();
