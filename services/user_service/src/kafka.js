@@ -11,3 +11,7 @@ export const kafka = new Kafka({
 export const producer = kafka.producer({
   allowAutoTopicCreation: false,
 });
+
+export const consumer = kafka.consumer({
+  groupId: "user-service",
+});

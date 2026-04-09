@@ -49,3 +49,5 @@ async function userProfileUpdate(user_id, attributes) {
   });
   console.log(`userGoals update event sent for user ${user_id}`);
 }
+
+async function userGoalsUpdate(user_id, attributes)
