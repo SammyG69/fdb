@@ -1,4 +1,4 @@
-import pool from "@lib/mealdb"
+import pool from '@/lib/mealdb'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
