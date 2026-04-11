@@ -5,9 +5,9 @@ export async function GET(request: Request) {
   const query = searchParams.get('q');
 
   const result = await pool.query(
-    `SELECT * FROM foods
-     WHERE search_vector @@ websearch_to_tsquery('english', $1)
-     LIMIT 20`,
+    `SELECT calories, protein, carbs, fats, fiber FROM foods
+ WHERE to_tsvector('english', name) @@ websearch_to_tsquery('english', $1)
+ LIMIT 20`,
     [query]
   );
   return Response.json(result.rows);
