@@ -8,13 +8,14 @@ export async function GET(request: Request) {
     return Response.json([]);
   }
 
-  const result = await pool.query(
-    `SELECT name, calories, protein, carbs, fats, fiber
-     FROM foods
-     WHERE name ILIKE '%' || $1 || '%'
-     ORDER BY name
-     LIMIT 20`,
-    [query.trim()]
-  );
+ const result = await pool.query(
+  `SELECT name, calories, protein, carbs, fats, fiber,
+          ts_rank(to_tsvector('english', name), websearch_to_tsquery('english', $1)) AS rank
+   FROM foods
+   WHERE to_tsvector('english', name) @@ websearch_to_tsquery('english', $1)
+   ORDER BY rank DESC
+   LIMIT 20`,
+  [query.trim()]
+);
   return Response.json(result.rows);
 }
