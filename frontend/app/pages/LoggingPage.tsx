@@ -26,6 +26,7 @@ export default function LoggingPage() {
   const { userId } = useAuth();
   const [mealType, setMealType] = useState('Breakfast');
   const [foodSearch, setFoodSearch] = useState('');
+  const [foodResults, setFoodResults] = useState<Food[]>([]);
   const [quantity, setQuantity] = useState(100);
   const [selectedFood, setSelectedFood] = useState<Food | null>(null);
   const [items, setItems] = useState<LogItem[]>([]);
@@ -33,10 +34,20 @@ export default function LoggingPage() {
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const foodResults = FOOD_OPTIONS.filter((f) =>
-    f.name.toLowerCase().includes(foodSearch.toLowerCase())
-  );
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (!foodSearch.trim() || selectedFood) {
+      setFoodResults([]);
+      return;
+    }
+    debounceRef.current = setTimeout(async () => {
+      const res = await fetch(`/api/foods?q=${encodeURIComponent(foodSearch.trim())}`);
+      const data = await res.json();
+      setFoodResults(data);
+    }, 300);
+  }, [foodSearch, selectedFood]);
 
   const totals = items.reduce(
     (acc, item) => ({
