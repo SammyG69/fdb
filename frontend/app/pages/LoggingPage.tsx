@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@clerk/nextjs';
 
 type Food = {
@@ -15,29 +15,6 @@ type LogItem = {
   food: Food;
   quantity: number;
 };
-
-const FOOD_OPTIONS: Food[] = [
-  { name: 'Chicken Breast', calories: 165, protein: 31, carbs: 0, fats: 3.6 },
-  { name: 'Salmon', calories: 208, protein: 20, carbs: 0, fats: 13 },
-  { name: 'Eggs', calories: 155, protein: 13, carbs: 1.1, fats: 11 },
-  { name: 'Greek Yogurt', calories: 59, protein: 10, carbs: 3.6, fats: 0.4 },
-  { name: 'Brown Rice', calories: 216, protein: 4.5, carbs: 45, fats: 1.8 },
-  { name: 'Oats', calories: 389, protein: 17, carbs: 66, fats: 7 },
-  { name: 'Banana', calories: 89, protein: 1.1, carbs: 23, fats: 0.3 },
-  { name: 'Apple', calories: 52, protein: 0.3, carbs: 14, fats: 0.2 },
-  { name: 'Avocado', calories: 160, protein: 2, carbs: 9, fats: 15 },
-  { name: 'Broccoli', calories: 34, protein: 2.8, carbs: 7, fats: 0.4 },
-  { name: 'Sweet Potato', calories: 86, protein: 1.6, carbs: 20, fats: 0.1 },
-  { name: 'Almonds', calories: 579, protein: 21, carbs: 22, fats: 50 },
-  { name: 'Peanut Butter', calories: 588, protein: 25, carbs: 20, fats: 50 },
-  { name: 'Whole Wheat Bread', calories: 247, protein: 13, carbs: 41, fats: 4.2 },
-  { name: 'Protein Shake', calories: 120, protein: 25, carbs: 3, fats: 1.5 },
-  { name: 'Quinoa', calories: 368, protein: 14, carbs: 64, fats: 6 },
-  { name: 'Cottage Cheese', calories: 98, protein: 11, carbs: 3.4, fats: 4.3 },
-  { name: 'Spinach', calories: 23, protein: 2.9, carbs: 3.6, fats: 0.4 },
-  { name: 'Blueberries', calories: 57, protein: 0.7, carbs: 14, fats: 0.3 },
-  { name: 'Olive Oil', calories: 884, protein: 0, carbs: 0, fats: 100 },
-];
 
 const MEAL_TYPES = ['Breakfast', 'Lunch', 'Snack', 'Dinner'];
 
