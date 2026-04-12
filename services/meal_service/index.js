@@ -2,10 +2,10 @@ import "dotenv/config";
 import express from "express";
 import { randomUUID } from "crypto";
 
-import { producer } from "./services/meal_service/src/kafka.js";
-import { mealLoggedEventSchema } from "./shared/schemas/mealLogged.Schema.js";
-import { mealUpdatedEventSchema } from "./shared/schemas/mealUpdated.Schema.js";
-import { mealDeletedEventSchema } from "./shared/schemas/mealDeleted.Schema.js";
+import { producer } from "./src/kafka.js";
+import { mealLoggedEventSchema } from "../../shared/schemas/mealLogged.Schema.js";
+import { mealUpdatedEventSchema } from "../../shared/schemas/mealUpdated.Schema.js";
+import { mealDeletedEventSchema } from "../../shared/schemas/mealDeleted.Schema.js";
 import router from "./metrics/index.js";
 
 console.log("STARTED NEW VERSION: EVT_29_BUILD");
