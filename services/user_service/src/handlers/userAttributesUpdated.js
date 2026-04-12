@@ -1,4 +1,4 @@
-import pkg from 'pkg';
+import pkg from 'pg';
 const {Pool} = pkg;
 
 const pool = new Pool({
