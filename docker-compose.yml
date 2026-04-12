@@ -68,9 +68,11 @@ services:
     ports: ["4001:4001"]
     environment:
       DATABASE_URL: postgres://user_user:user_pass@user-db:5432/user_db
-      KAFKA_BROKERS: redpanda:9092
+      KAFKA_BROKERS: ${KAFKA_BROKERS}
+      KAFKA_SASL_USERNAME: ${KAFKA_SASL_USERNAME}
+      KAFKA_SASL_PASSWORD: ${KAFKA_SASL_PASSWORD}
       SERVICE_NAME: user_service
-    depends_on: [user-db, redpanda]
+    depends_on: [user-db]
     networks:
       - default
       - monitoring
@@ -92,9 +94,11 @@ services:
     ports: ["4002:4002"]
     environment:
       DATABASE_URL: postgres://meal_user:meal_pass@meal-db:5432/meal_db
-      KAFKA_BROKERS: redpanda:9092
+      KAFKA_BROKERS: ${KAFKA_BROKERS}
+      KAFKA_SASL_USERNAME: ${KAFKA_SASL_USERNAME}
+      KAFKA_SASL_PASSWORD: ${KAFKA_SASL_PASSWORD}
       SERVICE_NAME: meal_service
-    depends_on: [meal-db, redpanda]
+    depends_on: [meal-db]
     networks:
       - default
       - monitoring
@@ -118,9 +122,11 @@ services:
     ports: ["4003:4003"]
     environment:
       DATABASE_URL: postgres://tracking_user:tracking_pass@tracking-db:5432/tracking_db
-      KAFKA_BROKERS: redpanda:9092
+      KAFKA_BROKERS: ${KAFKA_BROKERS}
+      KAFKA_SASL_USERNAME: ${KAFKA_SASL_USERNAME}
+      KAFKA_SASL_PASSWORD: ${KAFKA_SASL_PASSWORD}
       SERVICE_NAME: tracking_service
-    depends_on: [tracking-db, redpanda]
+    depends_on: [tracking-db]
     networks:
       - default
       - monitoring
