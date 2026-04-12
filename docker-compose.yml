@@ -123,29 +123,6 @@ services:
     volumes: [tracking_data:/var/lib/postgresql/data]
     ports: ["5435:5432"]
 
-  # ---------- Kafka-compatible broker ----------
-  redpanda:
-    image: redpandadata/redpanda:latest
-    command:
-      - redpanda
-      - start
-      - --overprovisioned
-      - --smp
-      - "1"
-      - --memory
-      - "1G"
-      - --reserve-memory
-      - "0M"
-      - --node-id
-      - "0"
-      - --check=false
-      - --kafka-addr
-      - PLAINTEXT://0.0.0.0:9092
-      - --advertise-kafka-addr
-      - PLAINTEXT://redpanda:9092
-    ports:
-      - "9092:9092"
-
 volumes:
   user_data:
   meal_data:
