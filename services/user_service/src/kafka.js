@@ -1,6 +1,6 @@
 import { Kafka, logLevel } from "kafkajs";
 
-const brokers = (process.env.KAFKA_BROKERS || "localhosdockt:9092").split(",");
+const brokers = (process.env.KAFKA_BROKERS || "localhost:9092").split(",");
 
 export const kafka = new Kafka({
   clientId: process.env.SERVICE_NAME || "user-service",
