@@ -72,7 +72,8 @@ export default function LoggingPage() {
   }
 
   async function handleSubmit() {
-    if (items.length === 0 || !userId) return;
+    if (items.length === 0) return;
+    if (!userId) { setError('Not authenticated. Please sign in.'); return; }
     setLoading(true);
     setError(null);
     try {
@@ -199,7 +200,7 @@ export default function LoggingPage() {
                   ) : (
                     foodResults.map((food) => (
                       <button
-                        key={food.id}
+                        key={food.name}
                         onClick={() => {
                           setSelectedFood(food);
                           setFoodSearch(food.name);
@@ -349,7 +350,7 @@ export default function LoggingPage() {
               )}
               <button
                 onClick={handleSubmit}
-                disabled={items.length === 0 || loading || !userId}
+                disabled={items.length === 0 || loading}
                 className="w-full rounded-2xl bg-slate-900 px-4 py-2.5 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {loading ? 'Submitting…' : 'Submit Meal Log'}
