@@ -96,7 +96,7 @@ export default function FoodPage() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {foods.map((food) => (
               <div
-                key={food.name}
+                key={food.id}
                 className="rounded-3xl bg-white p-5 shadow-sm ring-1 ring-slate-200 hover:shadow-md transition-shadow"
               >
                 <div className="mb-3">

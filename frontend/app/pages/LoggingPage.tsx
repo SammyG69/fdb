@@ -199,7 +199,7 @@ export default function LoggingPage() {
                   ) : (
                     foodResults.map((food) => (
                       <button
-                        key={food.name}
+                        key={food.id}
                         onClick={() => {
                           setSelectedFood(food);
                           setFoodSearch(food.name);
