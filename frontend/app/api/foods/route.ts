@@ -9,7 +9,7 @@ export async function GET(request: Request) {
   }
 
  const result = await pool.query(
-  `SELECT name, calories, protein, carbs, fats, fiber,
+  `SELECT id, name, calories, protein, carbs, fats, fiber,
           ts_rank(to_tsvector('english', name), websearch_to_tsquery('english', $1)) AS rank
    FROM foods
    WHERE to_tsvector('english', name) @@ websearch_to_tsquery('english', $1)

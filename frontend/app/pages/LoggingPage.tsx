@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@clerk/nextjs';
 
 type Food = {
+  id: number;
   name: string;
   calories: number;
   protein: number;
@@ -200,7 +201,7 @@ export default function LoggingPage() {
                   ) : (
                     foodResults.map((food) => (
                       <button
-                        key={food.name}
+                        key={food.id}
                         onClick={() => {
                           setSelectedFood(food);
                           setFoodSearch(food.name);
