@@ -1,27 +1,14 @@
-import pkg from 'pg';
-const { Pool } = pkg;
+import { pool } from "../db.js";
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL
-});
+export default async function handleMealDeleted(payload) {
+  console.log("Handling MealDeleted event");
 
-export default async function handleMealDeleted(event) {
+  const { mealId } = payload;
 
-  const { meal_id, user_id } = event;
+  await pool.query(
+    `DELETE FROM tracked_meals WHERE meal_id = $1`,
+    [mealId]
+  );
 
-  try {
-
-    await pool.query(
-      `
-      DELETE FROM meal_logs
-      WHERE meal_id = $1 AND user_id = $2
-      `,
-      [meal_id, user_id]
-    );
-
-    console.log(`Meal deleted: ${meal_id}`);
-
-  } catch (error) {
-    console.error("Error deleting meal:", error);
-  }
+  console.log(`Meal deleted: ${mealId}`);
 }

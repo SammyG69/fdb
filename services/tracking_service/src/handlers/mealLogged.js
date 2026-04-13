@@ -1,44 +1,18 @@
+import { pool } from "../db.js";
 
-import pkg from 'pg';
-const { Pool } = pkg;
-
-export default async function handleMealLogged(event) {
+export default async function handleMealLogged(payload) {
   console.log("Handling MealLogged event");
 
-  const query = `
-    INSERT INTO meals (
-      event_id,
-      meal_id,
-      user_id,
-      calories,
-      protein,
-      carbs,
-      fat,
-      logged_at
-    )
-    VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
-  `;
+  const { mealId, userId, mealType, mealDate } = payload;
 
-  const values = [
-    event.eventId,
-    event.mealId,
-    event.userId,
-    event.calories,
-    event.protein,
-    event.carbs,
-    event.fat,
-    event.loggedAt
-  ];
+  await pool.query(
+    `
+    INSERT INTO tracked_meals (meal_id, user_id, meal_type, meal_date)
+    VALUES ($1, $2, $3, $4)
+    ON CONFLICT (meal_id) DO NOTHING
+    `,
+    [mealId, userId, mealType, mealDate]
+  );
 
-  await pool.query(query, values);
-
-  console.log({
-    userId: event.userId,
-    calories: event.calories,
-    protein: event.protein,
-    carbs: event.carbs,
-    fat: event.fat,
-  });
-
-  console.log("Event Persisted to tracking_db");
+  console.log(`Meal tracked: ${mealId} (${mealType} on ${mealDate}) for user ${userId}`);
 }

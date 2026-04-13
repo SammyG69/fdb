@@ -18,10 +18,6 @@ app.get("/health", (_, res) => res.json({ ok: true, service: "tracking_service" 
 
 app.use(router);
 
-app.listen(4002, "0.0.0.0", () => {
-  console.log("tracking_service running on port 4002");
-});
-
 async function startConsumer() {
   await consumer.connect();
   console.log("Kafka consumer connected for tracking_service");
@@ -38,7 +34,7 @@ await consumer.run({
 
     const event = JSON.parse(message.value.toString());
 
-    switch (event.type) {
+    switch (event.eventType) {
 
       case "MealLogged":
         await handleMealLogged(event.payload);

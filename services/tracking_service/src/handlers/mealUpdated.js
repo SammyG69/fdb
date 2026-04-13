@@ -1,48 +1,18 @@
-import pkg from 'pg';
-const { Pool } = pkg;
+import { pool } from "../db.js";
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL
-});
+export default async function handleMealUpdated(payload) {
+  console.log("Handling MealUpdated event");
 
-export default async function handleMealUpdated(event) {
-  const {
-    meal_id,
-    user_id,
-    calories,
-    protein,
-    carbs,
-    fat,
-    logged_at
-  } = event;
+  const { mealId, userId, mealType, mealDate } = payload;
 
-  try {
+  await pool.query(
+    `
+    UPDATE tracked_meals
+    SET meal_type = $1, meal_date = $2
+    WHERE meal_id = $3 AND user_id = $4
+    `,
+    [mealType, mealDate, mealId, userId]
+  );
 
-    await pool.query(
-      `
-      UPDATE meal_logs
-      SET
-        calories = $1,
-        protein = $2,
-        carbs = $3,
-        fat = $4,
-        logged_at = $5
-      WHERE meal_id = $6 AND user_id = $7
-      `,
-      [
-        calories,
-        protein,
-        carbs,
-        fat,
-        logged_at,
-        meal_id,
-        user_id
-      ]
-    );
-
-    console.log(`Meal updated: ${meal_id}`);
-
-  } catch (error) {
-    console.error("Error updating meal:", error);
-  }
+  console.log(`Meal updated: ${mealId}`);
 }
