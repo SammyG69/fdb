@@ -83,11 +83,12 @@ export default function LoggingPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId,
-          name: mealType,
-          calories: totals.calories,
-          protein: totals.protein,
-          carbs: totals.carbs,
-          fat: totals.fats,
+          mealType: mealType.toLowerCase(),
+          mealDate: new Date().toISOString().slice(0, 10),
+          totalCalories: totals.calories,
+          totalProtein: totals.protein,
+          totalCarbs: totals.carbs,
+          totalFats: totals.fats,
         }),
       });
       if (!res.ok) {

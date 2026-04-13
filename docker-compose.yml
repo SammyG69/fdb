@@ -123,7 +123,9 @@ services:
       POSTGRES_USER: tracking_user
       POSTGRES_PASSWORD: tracking_pass
       POSTGRES_DB: tracking_db
-    volumes: [tracking_data:/var/lib/postgresql/data]
+    volumes:
+      - tracking_data:/var/lib/postgresql/data
+      - ./services/tracking_service/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports: ["5435:5432"]
 
 volumes:

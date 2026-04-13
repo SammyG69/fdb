@@ -3,7 +3,7 @@ import { baseEventSchema } from "./baseEvent.Schema.js";
 
 const payloadSchema = z.object({
   mealId: z.string().uuid(),
-  userId: z.string().uuid(),
+  userId: z.string().min(1),
   mealType: z.enum(["breakfast", "lunch", "dinner", "snack"]),
   mealDate: z.string().date(),
   totalCalories: z.number().nonnegative().default(0),
