@@ -50,15 +50,14 @@ app.post("/test-publish/logged", async (req, res) => {
       occurredAt: now,
       source: "meal_service",
       payload: {
-        mealLogId: randomUUID(),
         mealId: randomUUID(),
         userId: randomUUID(),
-        name: "Chicken Rice Bowl",
-        calories: 850,
-        protein: 50,
-        carbs: 55,
-        fat: 20,
-        loggedAt: now,
+        mealType: "lunch",
+        mealDate: now.slice(0, 10),
+        totalCalories: 850,
+        totalProtein: 50,
+        totalCarbs: 55,
+        totalFats: 20,
       },
     };
 
@@ -95,12 +94,12 @@ app.post("/test-publish/updated", async (req, res) => {
       payload: {
         mealId: randomUUID(),
         userId: randomUUID(),
-        name: "Updated Chicken Rice Bowl",
-        calories: 900,
-        protein: 55,
-        carbs: 60,
-        fat: 22,
-        loggedAt: now,
+        mealType: "dinner",
+        mealDate: now.slice(0, 10),
+        totalCalories: 900,
+        totalProtein: 55,
+        totalCarbs: 60,
+        totalFats: 22,
       },
     };
 
@@ -163,7 +162,7 @@ app.post("/test-publish/deleted", async (req, res) => {
 
 app.post("/meals/log", async (req, res) => {
   try {
-    const { userId, name, calories, protein, carbs, fat } = req.body;
+    const { userId, mealType, mealDate, totalCalories, totalProtein, totalCarbs, totalFats } = req.body;
     const now = new Date().toISOString();
 
     const rawEvent = {
@@ -175,12 +174,12 @@ app.post("/meals/log", async (req, res) => {
       payload: {
         mealId: randomUUID(),
         userId,
-        name,
-        calories,
-        protein,
-        carbs,
-        fat,
-        loggedAt: now,
+        mealType,
+        mealDate,
+        totalCalories: totalCalories ?? 0,
+        totalProtein: totalProtein ?? 0,
+        totalCarbs: totalCarbs ?? 0,
+        totalFats: totalFats ?? 0,
       },
     };
 

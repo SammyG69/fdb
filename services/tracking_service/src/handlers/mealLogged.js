@@ -6,7 +6,7 @@ export default async function handleMealLogged(event) {
   console.log("Handling MealLogged event");
 
   const query = `
-    INSERT INTO meal_logs_received (
+    INSERT INTO meals (
       event_id,
       meal_id,
       user_id,

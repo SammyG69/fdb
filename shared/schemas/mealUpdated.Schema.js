@@ -2,14 +2,14 @@ import { z } from "zod";
 import { baseEventSchema } from "./baseEvent.Schema.js";
 
 const payloadSchema = z.object({
-  mealId: z.string().min(1),
-  userId: z.string().min(1),
-  name: z.string().min(1),
-  calories: z.number().nonnegative(),
-  protein: z.number().nonnegative(),
-  carbs: z.number().nonnegative(),
-  fat: z.number().nonnegative(),
-  loggedAt: z.string().datetime()
+  mealId: z.string().uuid(),
+  userId: z.string().uuid(),
+  mealType: z.enum(["breakfast", "lunch", "dinner", "snack"]),
+  mealDate: z.string().date(),
+  totalCalories: z.number().nonnegative().default(0),
+  totalProtein: z.number().nonnegative().default(0),
+  totalCarbs: z.number().nonnegative().default(0),
+  totalFats: z.number().nonnegative().default(0),
 });
 
 export const mealUpdatedEventSchema = baseEventSchema.extend({
