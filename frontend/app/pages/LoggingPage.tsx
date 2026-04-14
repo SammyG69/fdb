@@ -85,10 +85,16 @@ export default function LoggingPage() {
           userId,
           mealType: mealType.toLowerCase(),
           mealDate: new Date().toISOString().slice(0, 10),
-          totalCalories: totals.calories,
-          totalProtein: totals.protein,
-          totalCarbs: totals.carbs,
-          totalFats: totals.fats,
+          sourceType: 'manual',
+          items: items.map((item) => ({
+            foodId: item.food.id,
+            quantity: item.quantity,
+            unit: 'g',
+            calories: scale(item.food.calories, item.quantity),
+            protein: scale(item.food.protein, item.quantity),
+            carbs: scale(item.food.carbs, item.quantity),
+            fats: scale(item.food.fats, item.quantity),
+          })),
         }),
       });
       if (!res.ok) {

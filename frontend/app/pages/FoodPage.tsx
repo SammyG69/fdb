@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 
 type Food = {
+  id: string;
   name: string;
   calories: number;
   protein: number;
@@ -113,20 +114,20 @@ export default function FoodPage() {
                 <div className="grid grid-cols-3 gap-2">
                   <div className="rounded-xl bg-slate-50 p-2.5 text-center">
                     <p className="text-[10px] uppercase tracking-wide text-slate-400">Protein</p>
-                    <p className="mt-0.5 text-sm font-semibold text-slate-800">{food.protein.toFixed(1)}g</p>
+                    <p className="mt-0.5 text-sm font-semibold text-slate-800">{parseFloat(String(food.protein)).toFixed(1)}g</p>
                   </div>
                   <div className="rounded-xl bg-slate-50 p-2.5 text-center">
                     <p className="text-[10px] uppercase tracking-wide text-slate-400">Carbs</p>
-                    <p className="mt-0.5 text-sm font-semibold text-slate-800">{food.carbs.toFixed(1)}g</p>
+                    <p className="mt-0.5 text-sm font-semibold text-slate-800">{parseFloat(String(food.carbs)).toFixed(1)}g</p>
                   </div>
                   <div className="rounded-xl bg-slate-50 p-2.5 text-center">
                     <p className="text-[10px] uppercase tracking-wide text-slate-400">Fats</p>
-                    <p className="mt-0.5 text-sm font-semibold text-slate-800">{food.fats.toFixed(1)}g</p>
+                    <p className="mt-0.5 text-sm font-semibold text-slate-800">{Number(food.fats).toFixed(1)}g</p>
                   </div>
                 </div>
 
-                {food.fiber > 0 && (
-                  <p className="mt-3 text-xs text-slate-400">Fibre: {food.fiber.toFixed(1)}g</p>
+                {parseFloat(String(food.fiber)) > 0 && (
+                  <p className="mt-3 text-xs text-slate-400">Fibre: {parseFloat(String(food.fiber)).toFixed(1)}g</p>
                 )}
               </div>
             ))}
