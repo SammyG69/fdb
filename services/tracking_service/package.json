@@ -2,22 +2,18 @@
   "name": "tracking_service",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@types/node": "~10.12.0",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
-    "kafkajs": "^2.2.4",
     "pg": "^8.20.0",
     "prom-client": "^15.1.3"
-  },
-  "devDependencies": {
-    "tsx": "^4.21.0"
   }
 }

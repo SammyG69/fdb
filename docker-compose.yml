@@ -134,9 +134,8 @@ services:
       POSTGRES_PASSWORD: food_password
       POSTGRES_DB: food_db
     volumes:
-      - food_data:/var/lib/postgresql/data
       - ./combined_foods.csv:/data/combined_foods.csv
-    ports: ["5430:5430"]
+    ports: ["5430:5432"]
 
 volumes:
   user_data:
