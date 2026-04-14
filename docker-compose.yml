@@ -38,10 +38,12 @@ services:
       USER_SERVICE_URL: http://user_service:4001
       MEAL_SERVICE_URL: http://meal_service:4002
       TRACKING_SERVICE_URL: http://tracking_service:4003
+
     depends_on:
       - user_service
       - meal_service
       - tracking_service
+
 
   # ---------- User Service + DB ----------
   user_service:
@@ -134,6 +136,7 @@ services:
       POSTGRES_PASSWORD: food_password
       POSTGRES_DB: food_db
     volumes:
+      - food_data:/var/lib/postgresql/data
       - ./combined_foods.csv:/data/combined_foods.csv
     ports: ["5430:5432"]
 
@@ -141,11 +144,10 @@ volumes:
   user_data:
   meal_data:
   tracking_data:
+  food_data:
   prom-data: {}
   grafana-storage: {}
 
 networks:
   monitoring:
     external: true
-  kafka-net:
-    driver: bridge
