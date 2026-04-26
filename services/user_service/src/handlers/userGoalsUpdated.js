@@ -16,7 +16,7 @@ export default async function handleUserGoals(event)
 
         try {
         await pool.query(
-        ` UPDATE user_goals
+        ` UPDATE user_profile
         SET
           weight = $1,
           height = $2,

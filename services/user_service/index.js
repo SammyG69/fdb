@@ -26,24 +26,12 @@ app.put("/users/:user_id/profile", async (req, res) => {
   }
 });
 
-// app.put("/users/:user_id/goals", async (req, res) => {
-//   try {
-//     const { user_id } = req.params;
-//     await userGoalsUpdate(user_id);
-//     res.json({ success: true });
-//   } catch (error) {
-//     console.error("Error in goals update route:", error);
-//     res.status(500).json({ error: "Failed to trigger goals update" });
-//   }
-// });
-
 app.listen(4001, () => {
   console.log("User service running on port 4001");
 });
 
 async function userProfileUpdate(user_id, attributes) {
   await handleUserUpdated({ user_id, ...attributes });
-  await handleUserGoals({user_id, ...attributes})
 console.log("Succesfully handled updating user and handling user goals")
 }
 

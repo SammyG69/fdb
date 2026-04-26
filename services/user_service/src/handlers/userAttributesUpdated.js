@@ -16,7 +16,7 @@ export default async function handleUserUpdated(event)
 
     try {
         await pool.query(
-        ` UPDATE user_attributes
+        ` UPDATE user_profile
         SET
           weight = $1,
           height = $2,
@@ -29,7 +29,7 @@ export default async function handleUserUpdated(event)
             user_id
         ]
         );
-        console.log(`User Attributes has been updated`);
+        console.log(`User Profile has been updated`);
 
     } catch (error) {
         console.error("Error updating the profile: ", error);
