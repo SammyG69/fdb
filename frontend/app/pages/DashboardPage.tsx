@@ -27,6 +27,7 @@ type TrackedMeal = {
 };
 
 const CALORIE_GOAL = 2400;
+const MEAL_TYPES = ['Breakfast', 'Lunch', 'Snack', 'Dinner'];
 
 const reminders = [
   { label: 'Drink water', due: 'in 30 min' },
@@ -42,6 +43,8 @@ export default function DashboardPage() {
   const { userId } = useAuth();
   const [meals, setMeals] = useState<TrackedMeal[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editType, setEditType] = useState('');
 
   useEffect(() => {
     if (!userId) return;
@@ -57,6 +60,37 @@ export default function DashboardPage() {
   const totalCarbs = meals.reduce((s, m) => s + (m.total_carbs || 0), 0);
   const totalFats = meals.reduce((s, m) => s + (m.total_fats || 0), 0);
   const completion = Math.min((totalCalories / CALORIE_GOAL) * 100, 100);
+
+  function startEdit(meal: TrackedMeal) {
+    setEditingId(meal.id);
+    setEditType(meal.meal_type);
+  }
+
+  function cancelEdit() {
+    setEditingId(null);
+    setEditType('');
+  }
+
+  async function saveEdit(id: number) {
+    const res = await fetch(`/api/meals/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mealType: editType }),
+    });
+    if (res.ok) {
+      setMeals((prev) =>
+        prev.map((m) => (m.id === id ? { ...m, meal_type: editType } : m))
+      );
+    }
+    cancelEdit();
+  }
+
+  async function deleteMeal(id: number) {
+    const res = await fetch(`/api/meals/${id}`, { method: 'DELETE' });
+    if (res.ok) {
+      setMeals((prev) => prev.filter((m) => m.id !== id));
+    }
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 p-6 md:p-10">
@@ -126,25 +160,76 @@ export default function DashboardPage() {
               ) : (
                 <div className="space-y-3">
                   {meals.map((meal) => (
-                    <div key={meal.id} className="flex items-center justify-between rounded-2xl bg-slate-50 p-4">
-                      <div>
-                        <p className="text-sm font-semibold text-slate-800">{meal.meal_type}</p>
-                        <p className="text-xs text-slate-500">
-                          {meal.items.length} item{meal.items.length !== 1 ? 's' : ''}
-                          {' · '}
-                          {Math.round(meal.total_protein)}g protein
-                          {' · '}
-                          {Math.round(meal.total_carbs)}g carbs
-                          {' · '}
-                          {Math.round(meal.total_fats)}g fats
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <span className="text-sm font-medium text-slate-700">{Math.round(meal.total_calories)} kcal</span>
-                        <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600">
-                          {formatTime(meal.logged_at)}
-                        </span>
-                      </div>
+                    <div key={meal.id} className="rounded-2xl bg-slate-50 p-4">
+                      {editingId === meal.id ? (
+                        <div className="flex items-center gap-3">
+                          <select
+                            value={editType}
+                            onChange={(e) => setEditType(e.target.value)}
+                            className="flex-1 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900"
+                          >
+                            {MEAL_TYPES.map((t) => (
+                              <option key={t} value={t}>{t}</option>
+                            ))}
+                          </select>
+                          <button
+                            onClick={() => saveEdit(meal.id)}
+                            className="rounded-xl bg-slate-900 px-3 py-2 text-xs font-medium text-white hover:opacity-90"
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={cancelEdit}
+                            className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-100"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm font-semibold text-slate-800">{meal.meal_type}</p>
+                            <p className="text-xs text-slate-500">
+                              {meal.items.length} item{meal.items.length !== 1 ? 's' : ''}
+                              {' · '}
+                              {Math.round(meal.total_protein)}g protein
+                              {' · '}
+                              {Math.round(meal.total_carbs)}g carbs
+                              {' · '}
+                              {Math.round(meal.total_fats)}g fats
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-medium text-slate-700">{Math.round(meal.total_calories)} kcal</span>
+                            <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600">
+                              {formatTime(meal.logged_at)}
+                            </span>
+                            <button
+                              onClick={() => startEdit(meal)}
+                              title="Edit meal type"
+                              className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-200 hover:text-slate-700"
+                            >
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                              </svg>
+                            </button>
+                            <button
+                              onClick={() => deleteMeal(meal.id)}
+                              title="Delete meal"
+                              className="rounded-lg p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-500"
+                            >
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="3 6 5 6 21 6" />
+                                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                                <path d="M10 11v6" />
+                                <path d="M14 11v6" />
+                                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                              </svg>
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
