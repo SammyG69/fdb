@@ -55,11 +55,29 @@ export default function DashboardPage() {
       .finally(() => setLoading(false));
   }, [userId]);
 
-  const totalCalories = meals.reduce((s, m) => s + (m.total_calories || 0), 0);
-  const totalProtein = meals.reduce((s, m) => s + (m.total_protein || 0), 0);
-  const totalCarbs = meals.reduce((s, m) => s + (m.total_carbs || 0), 0);
-  const totalFats = meals.reduce((s, m) => s + (m.total_fats || 0), 0);
-  const completion = Math.min((totalCalories / CALORIE_GOAL) * 100, 100);
+  console.log(
+  meals.map((m, i) => ({
+    i,
+    value: m.total_calories,
+    type: typeof m.total_calories,
+    full: m,
+  }))
+);
+
+  const toNum = (val: any) => {
+  const n = typeof val === "string" ? parseFloat(val) : Number(val);
+  return Number.isFinite(n) ? n : 0;
+};
+
+const totalCalories = meals.reduce((s, m) => s + toNum(m.total_calories), 0);
+const totalProtein  = meals.reduce((s, m) => s + toNum(m.total_protein), 0);
+const totalCarbs    = meals.reduce((s, m) => s + toNum(m.total_carbs), 0);
+const totalFats     = meals.reduce((s, m) => s + toNum(m.total_fats), 0);
+
+const completion = Math.min(
+  (totalCalories / (toNum(CALORIE_GOAL) || 1)) * 100,
+  100
+);
 
   function startEdit(meal: TrackedMeal) {
     setEditingId(meal.id);

@@ -90,10 +90,10 @@ export default function LoggingPage() {
             foodId: item.food.id,
             quantity: item.quantity,
             unit: 'g',
-            calories: scale(item.food.calories, item.quantity),
-            protein: scale(item.food.protein, item.quantity),
-            carbs: scale(item.food.carbs, item.quantity),
-            fats: scale(item.food.fats, item.quantity),
+            calories: Math.ceil(scale(item.food.calories, item.quantity)),
+            protein: Math.ceil(scale(item.food.protein, item.quantity)),
+            carbs: Math.ceil(scale(item.food.carbs, item.quantity)),
+            fats: Math.ceil(scale(item.food.fats, item.quantity)),
           })),
         }),
       });
@@ -216,7 +216,7 @@ export default function LoggingPage() {
                         className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0"
                       >
                         <span className="text-sm font-medium text-slate-800">{food.name}</span>
-                        <span className="text-xs text-slate-500">{food.calories} kcal / 100g</span>
+                        <span className="text-xs text-slate-500">{Math.ceil(food.calories)} kcal / 100g</span>
                       </button>
                     ))
                   )}
@@ -228,7 +228,7 @@ export default function LoggingPage() {
                 <div className="mb-4 rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
                   <p className="text-sm font-semibold text-slate-900 mb-1">{selectedFood.name}</p>
                   <p className="text-xs text-slate-500">
-                    {selectedFood.calories} kcal · {selectedFood.protein}g P · {selectedFood.carbs}g C · {selectedFood.fats}g F per 100g
+                    {Math.ceil(selectedFood.calories)} kcal · {selectedFood.protein}g P · {selectedFood.carbs}g C · {selectedFood.fats}g F per 100g
                   </p>
                 </div>
               )}
