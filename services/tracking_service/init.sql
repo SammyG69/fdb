@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS tracked_meals (
     total_calories NUMERIC(10,2) DEFAULT 0,
     total_protein NUMERIC(10,2) DEFAULT 0,
     total_carbs NUMERIC(10,2) DEFAULT 0,
-    total_fats NUMERIC(10,2) DEFAULT 0
+    total_fats NUMERIC(10,2) DEFAULT 0,
+    total_fibre NUMERIC(10,2) DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS tracked_meal_items (
@@ -26,5 +27,6 @@ CREATE TABLE IF NOT EXISTS tracked_meal_items (
     calories NUMERIC(10,2) DEFAULT 0,
     protein NUMERIC(10,2) DEFAULT 0,
     carbs NUMERIC(10,2) DEFAULT 0,
-    fats NUMERIC(10,2) DEFAULT 0
+    fats NUMERIC(10,2) DEFAULT 0,
+    fibre NUMERIC(10,2) DEFAULT 0
 );

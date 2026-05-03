@@ -12,6 +12,7 @@ type MealItem = {
   protein: number;
   carbs: number;
   fats: number;
+  fibre: number;
 };
 
 type TrackedMeal = {
@@ -22,6 +23,7 @@ type TrackedMeal = {
   total_protein: number;
   total_carbs: number;
   total_fats: number;
+  total_fibre: number;
   logged_at: string;
   items: MealItem[];
 };
@@ -73,6 +75,8 @@ const totalCalories = meals.reduce((s, m) => s + toNum(m.total_calories), 0);
 const totalProtein  = meals.reduce((s, m) => s + toNum(m.total_protein), 0);
 const totalCarbs    = meals.reduce((s, m) => s + toNum(m.total_carbs), 0);
 const totalFats     = meals.reduce((s, m) => s + toNum(m.total_fats), 0);
+const totalFibre    = meals.reduce((s, m) => s + toNum(m.total_fibre), 0);
+
 
 const completion = Math.min(
   (totalCalories / (toNum(CALORIE_GOAL) || 1)) * 100,
@@ -155,6 +159,10 @@ const completion = Math.min(
                   <p className="mt-1 text-2xl font-bold text-slate-900">{Math.round(totalFats)}g</p>
                 </div>
                 <div className="rounded-2xl bg-slate-50 p-4 text-center">
+                  <p className="text-xs text-slate-500">Fibre</p>
+                  <p className="mt-1 text-2xl font-bold text-slate-900">{Math.round(totalFibre)}g</p>
+                </div>
+                <div className="rounded-2xl bg-slate-50 p-4 text-center col-span-2">
                   <p className="text-xs text-slate-500">Meals</p>
                   <p className="mt-1 text-2xl font-bold text-slate-900">{meals.length}</p>
                 </div>
@@ -215,6 +223,8 @@ const completion = Math.min(
                               {Math.round(meal.total_carbs)}g carbs
                               {' · '}
                               {Math.round(meal.total_fats)}g fats
+                              {' · '}
+                              {Math.round(toNum(meal.total_fibre))}g fibre
                             </p>
                           </div>
                           <div className="flex items-center gap-2">

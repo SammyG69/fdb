@@ -10,6 +10,7 @@ type Food = {
   protein: number;
   carbs: number;
   fats: number;
+  fiber: number;
 };
 
 type LogItem = {
@@ -56,8 +57,9 @@ export default function LoggingPage() {
       protein: acc.protein + scale(item.food.protein, item.quantity),
       carbs: acc.carbs + scale(item.food.carbs, item.quantity),
       fats: acc.fats + scale(item.food.fats, item.quantity),
+      fiber: acc.fiber + scale(item.food.fiber ?? 0, item.quantity),
     }),
-    { calories: 0, protein: 0, carbs: 0, fats: 0 }
+    { calories: 0, protein: 0, carbs: 0, fats: 0, fiber: 0 }
   );
 
   function addItem() {
@@ -94,6 +96,7 @@ export default function LoggingPage() {
             protein: Math.ceil(scale(item.food.protein, item.quantity)),
             carbs: Math.ceil(scale(item.food.carbs, item.quantity)),
             fats: Math.ceil(scale(item.food.fats, item.quantity)),
+            fibre: Math.ceil(scale(item.food.fiber ?? 0, item.quantity)),
           })),
         }),
       });
@@ -130,7 +133,7 @@ export default function LoggingPage() {
             <span className="font-medium text-slate-700">{mealType}</span> — {totals.calories} kcal
           </p>
           <p className="text-sm text-slate-500 mb-6">
-            {totals.protein}g protein · {totals.carbs}g carbs · {totals.fats}g fats
+            {totals.protein}g protein · {totals.carbs}g carbs · {totals.fats}g fats · {totals.fiber}g fibre
           </p>
           <div className="flex gap-3 justify-center">
             <button
@@ -228,7 +231,7 @@ export default function LoggingPage() {
                 <div className="mb-4 rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
                   <p className="text-sm font-semibold text-slate-900 mb-1">{selectedFood.name}</p>
                   <p className="text-xs text-slate-500">
-                    {Math.ceil(selectedFood.calories)} kcal · {selectedFood.protein}g P · {selectedFood.carbs}g C · {selectedFood.fats}g F per 100g
+                    {Math.ceil(selectedFood.calories)} kcal · {selectedFood.protein}g P · {selectedFood.carbs}g C · {selectedFood.fats}g F · {selectedFood.fiber ?? 0}g Fibre per 100g
                   </p>
                 </div>
               )}
@@ -335,7 +338,7 @@ export default function LoggingPage() {
                       <span className="text-sm text-slate-600">Total Calories</span>
                       <span className="text-xl font-bold text-slate-900">{totals.calories} kcal</span>
                     </div>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-4 gap-2">
                       <div className="text-center">
                         <p className="text-[10px] uppercase tracking-wide text-slate-400">Protein</p>
                         <p className="text-sm font-semibold text-slate-800">{totals.protein}g</p>
@@ -347,6 +350,10 @@ export default function LoggingPage() {
                       <div className="text-center">
                         <p className="text-[10px] uppercase tracking-wide text-slate-400">Fats</p>
                         <p className="text-sm font-semibold text-slate-800">{totals.fats}g</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-[10px] uppercase tracking-wide text-slate-400">Fibre</p>
+                        <p className="text-sm font-semibold text-slate-800">{totals.fiber}g</p>
                       </div>
                     </div>
                   </div>

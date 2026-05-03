@@ -29,6 +29,7 @@ app.post("/tracked-meals", async (req, res) => {
   const totalProtein  = items.reduce((s, i) => s + (i.protein  || 0), 0);
   const totalCarbs    = items.reduce((s, i) => s + (i.carbs    || 0), 0);
   const totalFats     = items.reduce((s, i) => s + (i.fats     || 0), 0);
+  const totalFibre    = items.reduce((s, i) => s + (i.fibre    || 0), 0);
 
   const client = await pool.connect();
   try {
@@ -37,11 +38,11 @@ app.post("/tracked-meals", async (req, res) => {
     const mealResult = await client.query(
       `INSERT INTO tracked_meals
          (user_id, meal_type, meal_date, source_type, source_saved_meal_id,
-          total_calories, total_protein, total_carbs, total_fats)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+          total_calories, total_protein, total_carbs, total_fats, total_fibre)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
        RETURNING *`,
       [userId, mealType, mealDate, sourceType, sourceSavedMealId,
-       totalCalories, totalProtein, totalCarbs, totalFats]
+       totalCalories, totalProtein, totalCarbs, totalFats, totalFibre]
     );
 
     const meal = mealResult.rows[0];
@@ -49,10 +50,10 @@ app.post("/tracked-meals", async (req, res) => {
     for (const item of items) {
       await client.query(
         `INSERT INTO tracked_meal_items
-           (tracked_meal_id, food_id, quantity, unit, calories, protein, carbs, fats)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+           (tracked_meal_id, food_id, quantity, unit, calories, protein, carbs, fats, fibre)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
         [meal.id, item.foodId, item.quantity, item.unit || "g",
-         item.calories || 0, item.protein || 0, item.carbs || 0, item.fats || 0]
+         item.calories || 0, item.protein || 0, item.carbs || 0, item.fats || 0, item.fibre || 0]
       );
     }
 
@@ -92,7 +93,8 @@ app.get("/tracked-meals", async (req, res) => {
                'calories', i.calories,
                'protein',  i.protein,
                'carbs',    i.carbs,
-               'fats',     i.fats
+               'fats',     i.fats,
+               'fibre',    i.fibre
              )
            ) FILTER (WHERE i.id IS NOT NULL),
            '[]'
